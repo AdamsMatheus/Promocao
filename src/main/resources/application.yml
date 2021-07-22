@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    #Configuração padrão para conexão a um banco de dados
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/tour
+    username: admin
+    password: 123456
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop # Create-drop, dropa e cria a tabela toda vez que esse serviço sobe
+    generate-ddl: true #Cria as tabelas quando sobe a aplicação
