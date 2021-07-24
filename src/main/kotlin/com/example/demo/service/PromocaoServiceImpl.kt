@@ -2,45 +2,45 @@ package com.example.demo.service
 
 import com.example.demo.DemoApplication
 import com.example.demo.model.Promocao
+import com.example.demo.repository.PromocaoRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 
-
+@Component
 class PromocaoServiceImp : PromocaoService {
 
-    companion object {
-        //Quando iniciada aplicação, sobe as promoções
-        val initialPromocoes = arrayOf(
-            Promocao(1, "Maravilhosa viagem", "Cancun", true, 7, 4000.00),
-            Promocao(2, "Maravilhosa viagem", "Belgica", true, 7, 4000.00),
-            Promocao(3, "Maravilhosa viagem", "India", true, 7, 4000.00),
-            Promocao(4, "Maravilhosa viagem", "Nova Iorque", true, 7, 4000.00)
-        )
-    }
-
-    var promocoes =
-        ConcurrentHashMap<Long, Promocao>(initialPromocoes.associateBy(Promocao::id))
+    @Autowired
+    lateinit var promocaoRepository: PromocaoRepository
 
 
     override fun create(promocao: Promocao) {
-        promocoes[promocao.id]= promocao
+        this.promocaoRepository.save(promocao)
     }
 
     override fun getById(id: Long): Promocao? {
-        return promocoes[id]
+        return promocaoRepository.findById(id).orElseGet(null)
     }
 
     override fun delete(id: Long) {
-        promocoes.remove(id)
+        promocaoRepository.delete(Promocao(id = id))
 
     }
 
     override fun update(id: Long, promocao: Promocao) {
-        delete(id)
-        create(promocao)
+        return
     }
 
-    override fun searchByLocal(local: String): List<Promocao> =
-        promocoes.filter { it.value.local.contains(local, true) }.map(Map.Entry<Long, Promocao>::value).toList()
+    override fun searchByLocal(local: String): List<Promocao> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAll(start: Int, size: Int): List<Promocao> {
+        val pages:Pageable = PageRequest.of(start,size)
+        return this.promocaoRepository.findAll(pages).toList()
+    }
 }
+

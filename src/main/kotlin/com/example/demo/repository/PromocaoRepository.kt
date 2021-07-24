@@ -1,8 +1,8 @@
 package com.example.demo.repository
 
 import com.example.demo.model.Promocao
-import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.repository.PagingAndSortingRepository
 
-interface PromocaoRepository: JpaRepository<Promocao,Long>{
+interface PromocaoRepository: PagingAndSortingRepository<Promocao,Long>{
 
 }

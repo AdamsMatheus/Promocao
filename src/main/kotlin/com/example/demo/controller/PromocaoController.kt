@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.util.concurrent.ConcurrentHashMap
 
 @RestController
 @RequestMapping("/promocoes")
@@ -50,13 +49,12 @@ class PromocaoController {
     }
 
     @GetMapping()
-    fun getAll(@RequestParam(required = false, defaultValue = "") localfilter: String): ResponseEntity<List<Promocao>>{
-        var status = HttpStatus.NOT_FOUND
-        val lista = promocaoService.searchByLocal(localfilter)
-        if(lista.size == 0){
-            status = HttpStatus.NOT_FOUND
-        }
-        return ResponseEntity(lista,status)
+    fun getAll(@RequestParam(required = false,defaultValue = "1")start: Int,
+               @RequestParam( required = false, defaultValue = "3") size: Int)
+                :ResponseEntity<List<Promocao>>{
+        val response = this.promocaoService.getAll(start,size)
+        val status = if(response.size == 0) HttpStatus.NOT_FOUND else HttpStatus.OK
+        return ResponseEntity(response,status)
     }
 
 }
