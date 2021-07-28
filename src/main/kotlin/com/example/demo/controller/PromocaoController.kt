@@ -3,6 +3,7 @@ package com.example.demo.controller
 import com.example.demo.model.Promocao
 import com.example.demo.service.PromocaoService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -49,6 +50,7 @@ class PromocaoController {
     }
 
     @GetMapping()
+    @Cacheable("promocoes")
     fun getAll(@RequestParam(required = false,defaultValue = "1")start: Int,
                @RequestParam( required = false, defaultValue = "3") size: Int)
                 :ResponseEntity<List<Promocao>>{
